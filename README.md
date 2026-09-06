@@ -9,11 +9,12 @@ Log of bugs I've found on live sites, with status and fixes I've suggested. PHP 
 
 ## Structure
 
-- `index.php` - public feed of cases
-- `case.php` - individual case detail page
-- `admin/new.php` - entry form (local-network only, no auth)
-- `includes/` - DB connection, helpers
-- `screenshots/` - before/after images per case
+- `src/schema.sql` - DB schema (run once to create `data/cases.db`)
+- `src/index.php` - public feed of cases
+- `src/case.php` - individual case detail page
+- `src/admin/new.php` - entry form (local-network only, no auth)
+- `src/includes/` - DB connection, helpers
+- `src/data/` - `cases.db` + screenshots (gitignored, private, server-only)
 
 See `doc/HANDOFF.md` for full project spec.
 

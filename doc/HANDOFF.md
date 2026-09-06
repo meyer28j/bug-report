@@ -30,15 +30,15 @@ A personal log of bugs found on live websites, reported to the company, and (oft
 In display order:
 1. Title — [Company] — [1-line issue]
 2. Status badge — Reported / Acknowledged / Fixed / No Response / Won't Fix (color-coded: gray/yellow/green/red)
-3. Date Found
-4. Date Reported
-5. Company
-6. Page URL
-7. Reported Via (email/form/social/etc.)
-8. Issue description (short)
-9. Screenshot — Before
-10. Suggested Fix (code snippet/diff)
-11. Screenshot — After (if applicable)
+3. Date Reported
+4. Company
+5. Page URL
+6. Reported Via (email/form/social/etc.)
+7. Issue description (short)
+8. Screenshot — Bug (the original issue)
+9. Suggested Fix (code snippet/diff)
+10. Screenshot — Fix Proof (optional — e.g. live DOM/CSS edit in browser inspector, showing the suggested fix works)
+11. Screenshot — After (if applicable — real deployed fix, once the company ships it)
 12. Date Acknowledged
 13. Date Fixed
 14. Response Time (calculated, not stored)
@@ -88,18 +88,21 @@ Response time / resolution time are **calculated in PHP from the date fields**, 
 
 ```
 /bug-report/
-├── cases.db
-├── index.php              # public feed
-├── case.php               # public case page (?slug=xxx)
-├── includes/
-│   ├── db.php             # PDO connection
-│   └── helpers.php        # date-diff calc, status badge render
-├── screenshots/
-│   ├── before/
-│   └── after/
-├── style.css
-└── admin/
-    └── new.php            # entry form, local-network only, no auth
+├── doc/
+│   └── HANDOFF.md
+└── src/
+    ├── schema.sql          # DB schema (source of truth, run once to create cases.db)
+    ├── index.php           # public feed
+    ├── case.php            # public case page (?slug=xxx)
+    ├── includes/
+    │   ├── db.php          # PDO connection
+    │   └── helpers.php     # date-diff calc, status badge render
+    ├── style.css
+    ├── admin/
+    │   └── new.php         # entry form, local-network only, no auth
+    └── data/               # gitignored — private, lives only on the server
+        ├── cases.db
+        └── screenshots/    # flat, slug-prefixed filenames (e.g. 2026-09-06-acme-corp-bug.png)
 ```
 
 ## Explicitly Out of Scope (for now)
