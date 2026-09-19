@@ -26,12 +26,12 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 - [x] Empty-state (no cases yet)
 
 ## Phase 4 — Case Page (`src/case.php`)
-- [ ] Fetch case by slug (prepared statement); 404 + home button if not found
-- [ ] Render all 12 template sections in SPEC.md Case Template order
-- [ ] Render bug/fix-proof/after screenshots, large/clickable (fix-proof and after are optional)
-- [ ] Render suggested fix in `<pre><code>`
-- [ ] Render timeline block (Reported → Fixed, plain dates)
-- [ ] Handle missing optional fields (no fix-proof/after screenshot, not yet fixed)
+- [x] Fetch case by slug (prepared statement); 404 + home button if not found
+- [x] Render all 12 template sections in SPEC.md Case Template order
+- [x] Render bug/fix-proof/after screenshots, large/clickable (fix-proof and after are optional)
+- [x] Render suggested fix in `<pre><code>`
+- [x] Render timeline block (Reported → Fixed, plain dates)
+- [x] Handle missing optional fields (no fix-proof/after screenshot, not yet fixed)
 
 ## Phase 5 — Entry Form (`src/admin/new.php`)
 - [ ] Fill in SPEC.md's Admin section — exact fields, required vs optional, validation rules
