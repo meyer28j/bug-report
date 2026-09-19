@@ -3,10 +3,10 @@
 Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.md), the master design doc — don't duplicate them here.
 
 ## Phase 0 — Scaffolding & Environment
-- [x] `.gitignore`: `/data/`, `src/screenshots/*` (keep dir via `.gitkeep`)
+- [x] `.gitignore`: `/data/`, `src/screenshots/`
 - [x] `LICENSE` (MIT), `README.md`
-- [ ] Create remaining directory structure per SPEC.md File Structure (`src/index.php`, `src/case.php`, `src/includes/`, `src/style.css`, `src/admin/`, `src/screenshots/.gitkeep`)
-- [ ] Confirm local PHP + `sqlite3` CLI available
+- [x] Create remaining directory structure per SPEC.md File Structure (`src/index.php`, `src/case.php`, `src/includes/`, `src/style.css`, `src/admin/`, `src/screenshots/`)
+- [x] Confirm local PHP + `sqlite3` CLI available
 - [ ] Confirm git remote + SSH access to LAMP server for deploy
 
 ## Phase 1 — Database
