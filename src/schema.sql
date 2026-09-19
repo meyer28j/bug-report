@@ -6,12 +6,11 @@ CREATE TABLE cases (
     issue_title TEXT NOT NULL,          -- 1-line summary
     issue_description TEXT,
     status TEXT NOT NULL DEFAULT 'reported'
-        CHECK (status IN ('reported', 'acknowledged', 'fixed', 'no_response', 'wont_fix')),
+        CHECK (status IN ('reported', 'fixed', 'no_response', 'wont_fix')),
     reported_via TEXT,                  -- email/form/twitter/etc
 
     date_reported TEXT NOT NULL,        -- ISO 8601 dates stored as TEXT
-    date_acknowledged TEXT,
-    date_fixed TEXT,
+    date_fixed TEXT,                    -- date the fix was confirmed/noticed, not necessarily the exact date the company shipped it
 
     screenshot_bug TEXT NOT NULL,       -- file path, relative to screenshots/ — the original bug
     screenshot_fix_proof TEXT,          -- optional — dev-tools live edit demonstrating the suggested fix

@@ -69,7 +69,8 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 - Plain `<pre><code>` with CSS monospace styling. No syntax highlighting, no JS.
 
 ## Timeline
-- `date_reported`, `date_acknowledged`, `date_fixed` are recorded and shown as plain milestone dates on the case page timeline: Reported → Acknowledged → Fixed.
+- `date_reported` and `date_fixed` are recorded and shown as plain milestone dates on the case page timeline: Reported → Fixed.
+- `date_fixed` is the date the fix was confirmed/noticed during a check-in, not necessarily the exact date the company shipped it — cases aren't monitored continuously, so there's an inherent margin of error. No company acknowledgment step is tracked; the only input needed from the company's side is whether the issue ends up fixed.
 
 ## Security / File Exposure
 - `cases.db` lives in `data/`, a sibling of `src/` (the document root) — physically outside webroot, so it's never HTTP-reachable regardless of `.htaccess`. This is the actual guarantee; no rule to get wrong.
@@ -88,7 +89,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 ## Case Template (strict, same every time)
 In display order:
 1. Title — [Company] — [1-line issue]
-2. Status badge — Reported / Acknowledged / Fixed / No Response / Won't Fix (colors per Visual Design below)
+2. Status badge — Reported / Fixed / No Response / Won't Fix (colors per Visual Design below)
 3. Date Reported
 4. Company
 5. Page URL
@@ -98,12 +99,11 @@ In display order:
 9. Suggested Fix (code snippet/diff)
 10. Screenshot — Fix Proof (optional)
 11. Screenshot — After (optional, if applicable)
-12. Date Acknowledged
-13. Date Fixed
+12. Date Fixed
 
 ## Admin
 - `admin/index.php` — list of all cases with an edit link per row.
-- `admin/new.php` — add a case; required at submit: company, page_url, issue_title, screenshot_bug. Everything else (issue_description, suggested_fix, date_acknowledged, date_fixed, the other two screenshots) is optional and filled in later via `edit.php`.
+- `admin/new.php` — add a case; required at submit: company, page_url, issue_title, screenshot_bug. Everything else (issue_description, suggested_fix, date_fixed, the other two screenshots) is optional and filled in later via `edit.php`.
 - `admin/edit.php?slug=` — loads a case pre-filled, updates it on submit.
 - Exact field validation rules: **TBD** — not yet spec'd, keep simple.
 
@@ -111,7 +111,7 @@ In display order:
 - Responsive — public and admin pages both work at desktop and mobile widths.
 - Big, generous whitespace; large easy-to-read type; not cramped.
 - Status shown as a small colored badge/pill; screenshots large/clickable, not thumbnails; suggested fix in a monospace block; minimal color palette overall, color used only for status badges; clean sans-serif, dark text on light background.
-- Status badge colors — five distinct colors, one per status: Reported=gray, Acknowledged=yellow, Fixed=green, No Response=red, Won't Fix=purple.
+- Status badge colors — four distinct colors, one per status: Reported=yellow, Fixed=green, No Response=red, Won't Fix=purple.
 - Exact hex values, type scale, spacing: **TBD** — fill in here once chosen.
 
 ## Out of Scope (for now)

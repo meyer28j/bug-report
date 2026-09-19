@@ -11,14 +11,14 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 
 ## Phase 1 — Database
 - [x] Write `src/schema.sql`
-- [ ] Build `data/cases.db` locally from `src/schema.sql` (sibling of `src/`, outside webroot)
-- [ ] Insert 1–2 seed rows for dev/testing
+- [x] Build `data/cases.db` locally from `src/schema.sql` (sibling of `src/`, outside webroot)
+- [x] Insert 1–2 seed rows for dev/testing
 
 ## Phase 2 — Includes
-- [ ] `src/includes/db.php` — PDO sqlite connection to `../data/cases.db`, exceptions on error
-- [ ] `src/includes/helpers.php` — status badge render (colors per SPEC.md)
-- [ ] `src/includes/helpers.php` — timeline render (Reported → Acknowledged → Fixed as plain dates)
-- [ ] `src/includes/helpers.php` — slug generator (`date_reported` + company, numeric suffix on collision)
+- [x] `src/includes/db.php` — PDO sqlite connection to `../data/cases.db`, exceptions on error
+- [x] `src/includes/helpers.php` — status badge render (colors per SPEC.md)
+- [x] `src/includes/helpers.php` — timeline render (Reported → Fixed as plain dates)
+- [x] `src/includes/helpers.php` — slug generator (`date_reported` + company, numeric suffix on collision)
 
 ## Phase 3 — Public Feed (`src/index.php`)
 - [ ] Query all cases, newest `date_reported` first
@@ -27,11 +27,11 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 
 ## Phase 4 — Case Page (`src/case.php`)
 - [ ] Fetch case by slug (prepared statement); 404 + home button if not found
-- [ ] Render all 13 template sections in SPEC.md Case Template order
+- [ ] Render all 12 template sections in SPEC.md Case Template order
 - [ ] Render bug/fix-proof/after screenshots, large/clickable (fix-proof and after are optional)
 - [ ] Render suggested fix in `<pre><code>`
-- [ ] Render timeline block (Reported → Acknowledged → Fixed, plain dates)
-- [ ] Handle missing optional fields (no fix-proof/after screenshot, not yet acknowledged/fixed)
+- [ ] Render timeline block (Reported → Fixed, plain dates)
+- [ ] Handle missing optional fields (no fix-proof/after screenshot, not yet fixed)
 
 ## Phase 5 — Entry Form (`src/admin/new.php`)
 - [ ] Fill in SPEC.md's Admin section — exact fields, required vs optional, validation rules
@@ -45,7 +45,7 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 This is a core, recurring workflow (checking in on cases and updating them), not a one-off — needs to be fast to use.
 - [ ] `src/admin/index.php` — admin listing of all cases (slug, company, status) with an Edit link per row, so a case is easy to find without knowing its slug
 - [ ] `src/admin/edit.php?slug=` — load one case, pre-fill form with its current values
-- [ ] Allow updating status, date_acknowledged, date_fixed, issue_description, suggested_fix
+- [ ] Allow updating status, date_fixed, issue_description, suggested_fix
 - [ ] Allow uploading/replacing the fix-proof and after screenshots (bug screenshot stays as originally set)
 - [ ] Update row via prepared UPDATE statement, bump `updated_at`
 - [ ] Redirect to the case page on success; show validation errors on failure
