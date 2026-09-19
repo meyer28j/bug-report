@@ -105,7 +105,15 @@ In display order:
 - `admin/index.php` — list of all cases with an edit link per row.
 - `admin/new.php` — add a case; required at submit: company, page_url, issue_title, screenshot_bug. Everything else (issue_description, suggested_fix, date_fixed, the other two screenshots) is optional and filled in later via `edit.php`.
 - `admin/edit.php?slug=` — loads a case pre-filled, updates it on submit.
-- Exact field validation rules: **TBD** — not yet spec'd, keep simple.
+- Field validation rules (`new.php`):
+  - `company` — required, ≤200 chars.
+  - `page_url` — required, must be a valid `http(s)://` URL.
+  - `issue_title` — required, ≤200 chars.
+  - `reported_via` — optional, ≤100 chars.
+  - `date_reported` — required, `YYYY-MM-DD`; defaults to today in the form but editable.
+  - `screenshot_bug` — required file upload; jpg/png/webp by extension + MIME, 5MB cap.
+  - `issue_description`, `suggested_fix` — optional, no length cap (free-form text areas).
+- On validation failure, `new.php` re-renders the form with submitted values and inline per-field error messages (file input can't be repopulated, so a failed screenshot upload must be re-selected).
 
 ## Visual Design
 - Responsive — public and admin pages both work at desktop and mobile widths.

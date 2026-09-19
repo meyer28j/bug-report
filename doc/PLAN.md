@@ -34,12 +34,12 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 - [x] Handle missing optional fields (no fix-proof/after screenshot, not yet fixed)
 
 ## Phase 5 — Entry Form (`src/admin/new.php`)
-- [ ] Fill in SPEC.md's Admin section — exact fields, required vs optional, validation rules
-- [ ] Build form matching schema fields; only company, page_url, issue_title, screenshot_bug required
-- [ ] Handle bug/fix-proof/after file uploads (jpg/png/webp, 5MB cap, ext+MIME check; bug required, others optional)
-- [ ] Auto-generate slug on submit
-- [ ] Insert row (prepared statement); redirect to new case page on success
-- [ ] Show validation errors on failure
+- [x] Fill in SPEC.md's Admin section — exact fields, required vs optional, validation rules
+- [x] Build form matching schema fields; only company, page_url, issue_title, screenshot_bug required
+- [x] Handle bug screenshot upload (jpg/png/webp, 5MB cap, ext+MIME check; required) — fix-proof/after uploads are edit.php's job (Phase 6)
+- [x] Auto-generate slug on submit
+- [x] Insert row (prepared statement); redirect to new case page on success
+- [x] Show validation errors on failure
 
 ## Phase 6 — Edit/Update Case (`src/admin/index.php`, `src/admin/edit.php`)
 This is a core, recurring workflow (checking in on cases and updating them), not a one-off — needs to be fast to use.
@@ -75,3 +75,6 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [ ] Add first real case via admin form
 - [ ] Verify feed + case page in production
 - [ ] LinkedIn post (external, author-written)
+
+## Deferred ideas
+- Paste-from-clipboard for screenshot uploads (`new.php`'s `screenshot_bug`, later `edit.php`'s fix-proof/after) — small vanilla-JS enhancement via `DataTransfer`, held until after Phase 5/6 are tested.

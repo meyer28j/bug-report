@@ -1,5 +1,12 @@
 <?php
 
+const ALLOWED_UPLOAD_MIME_TYPES = [
+    'image/jpeg' => 'jpg',
+    'image/png' => 'png',
+    'image/webp' => 'webp',
+];
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
 const STATUS_LABELS = [
     'reported' => 'Reported',
     'fixed' => 'Fixed',
@@ -28,6 +35,42 @@ function renderTimeline(?string $dateReported, ?string $dateFixed): string
     }
 
     return '<div class="timeline">' . implode('', $items) . '</div>';
+}
+
+/**
+ * Validates and stores an uploaded screenshot.
+ *
+ * @return array{0: ?string, 1: ?string} [$storedFilename, $error]. Both null means no file was submitted.
+ */
+function validateAndStoreUpload(?array $file, string $slug, string $suffix, string $destDir): array
+{
+    if ($file === null || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return [null, null];
+    }
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        return [null, 'Upload failed.'];
+    }
+
+    if ($file['size'] > MAX_UPLOAD_BYTES) {
+        return [null, 'File exceeds the 5MB size limit.'];
+    }
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $mime = mime_content_type($file['tmp_name']);
+    $expectedExt = ALLOWED_UPLOAD_MIME_TYPES[$mime] ?? null;
+    $validExts = $expectedExt === 'jpg' ? ['jpg', 'jpeg'] : [$expectedExt];
+
+    if ($expectedExt === null || !in_array($ext, $validExts, true)) {
+        return [null, 'File must be a JPG, PNG, or WEBP image.'];
+    }
+
+    $filename = $slug . '-' . $suffix . '.' . $expectedExt;
+    if (!move_uploaded_file($file['tmp_name'], $destDir . '/' . $filename)) {
+        return [null, 'Failed to save uploaded file.'];
+    }
+
+    return [$filename, null];
 }
 
 function generateSlug(PDO $pdo, string $dateReported, string $company): string
