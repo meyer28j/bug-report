@@ -5,6 +5,7 @@ Personal bug-log site (public portfolio + LinkedIn-linked case log). Guiding pri
 ## Read first
 - **[doc/PLAN.md](doc/PLAN.md)** — live progress checklist. Start here to see what's done and what's next.
 - **[doc/SPEC.md](doc/SPEC.md)** — master design doc: purpose, stack, data model, security, visual design, all of it. The canonical spec.
+- **[doc/TEST.md](doc/TEST.md)** — manual QA checklist, grows as phases land.
 
 Read these before any implementation work; do not duplicate their content here.
 
