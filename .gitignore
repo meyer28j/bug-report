@@ -1,1 +1,3 @@
-src/data/
+/data/
+src/screenshots/*
+!src/screenshots/.gitkeep

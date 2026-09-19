@@ -12,7 +12,7 @@ CREATE TABLE cases (
     date_acknowledged TEXT,
     date_fixed TEXT,
 
-    screenshot_bug TEXT,                -- file path, relative to data/screenshots/ — the original bug
+    screenshot_bug TEXT,                -- file path, relative to screenshots/ — the original bug
     screenshot_fix_proof TEXT,          -- optional — dev-tools live edit demonstrating the suggested fix
     screenshot_after TEXT,              -- optional — real deployed fix, once shipped
     suggested_fix TEXT,                 -- raw code snippet/diff text
