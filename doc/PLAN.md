@@ -21,9 +21,9 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 - [x] `src/includes/helpers.php` — slug generator (`date_reported` + company, numeric suffix on collision)
 
 ## Phase 3 — Public Feed (`src/index.php`)
-- [ ] Query all cases, newest `date_reported` first
-- [ ] Render row list: Date · Company · issue_title · status badge · link to case page
-- [ ] Empty-state (no cases yet)
+- [x] Query all cases, newest `date_reported` first
+- [x] Render row list: Date · Company · issue_title · status badge · link to case page
+- [x] Empty-state (no cases yet)
 
 ## Phase 4 — Case Page (`src/case.php`)
 - [ ] Fetch case by slug (prepared statement); 404 + home button if not found
