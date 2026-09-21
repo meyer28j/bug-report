@@ -78,3 +78,4 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 
 ## Deferred ideas
 - Paste-from-clipboard for screenshot uploads (`new.php`'s `screenshot_bug`, later `edit.php`'s fix-proof/after) — small vanilla-JS enhancement via `DataTransfer`, held until after Phase 5/6 are tested.
+- Self-referential 404 easter egg: when `case.php`'s 404 is hit, auto-create a case logging the site's own bug, then show it to the visitor with a link to the case and a link home. Needs a dedupe key (e.g. the requested slug/path) so repeat visits to the same broken link reuse the existing case instead of creating duplicates.

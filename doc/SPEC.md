@@ -116,6 +116,7 @@ In display order:
 - On validation failure, `new.php` re-renders the form with submitted values and inline per-field error messages (file input can't be repopulated, so a failed screenshot upload must be re-selected).
 
 ## Visual Design
+- Launch point: [Skeleton](http://getskeleton.com) CSS boilerplate — a starting grid/typography base for `style.css`, not a dependency to keep long-term; customize/strip down from there.
 - Responsive — public and admin pages both work at desktop and mobile widths.
 - Big, generous whitespace; large easy-to-read type; not cramped.
 - Status shown as a small colored badge/pill; screenshots large/clickable, not thumbnails; suggested fix in a monospace block; minimal color palette overall, color used only for status badges; clean sans-serif, dark text on light background.
