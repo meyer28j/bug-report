@@ -43,12 +43,12 @@ Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.
 
 ## Phase 6 — Edit/Update Case (`src/admin/index.php`, `src/admin/edit.php`)
 This is a core, recurring workflow (checking in on cases and updating them), not a one-off — needs to be fast to use.
-- [ ] `src/admin/index.php` — admin listing of all cases (slug, company, status) with an Edit link per row, so a case is easy to find without knowing its slug
-- [ ] `src/admin/edit.php?slug=` — load one case, pre-fill form with its current values
-- [ ] Allow updating status, date_fixed, issue_description, suggested_fix
-- [ ] Allow uploading/replacing the fix-proof and after screenshots (bug screenshot stays as originally set)
-- [ ] Update row via prepared UPDATE statement, bump `updated_at`
-- [ ] Redirect to the case page on success; show validation errors on failure
+- [x] `src/admin/index.php` — admin listing of all cases (slug, company, status) with an Edit link per row, so a case is easy to find without knowing its slug
+- [x] `src/admin/edit.php?slug=` — load one case, pre-fill form with its current values
+- [x] Allow updating status, date_fixed, issue_description, suggested_fix
+- [x] Allow uploading/replacing the fix-proof and after screenshots (bug screenshot stays as originally set)
+- [x] Update row via prepared UPDATE statement, bump `updated_at`
+- [x] Redirect to the case page on success; show validation errors on failure
 
 ## Phase 7 — Visual Design
 - [ ] Fill in SPEC.md's Visual Design section — exact hex values, type scale, spacing

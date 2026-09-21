@@ -83,10 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-function fieldError(array $errors, string $field): string
-{
-    return isset($errors[$field]) ? '<span class="field-error">' . htmlspecialchars($errors[$field], ENT_QUOTES) . '</span>' : '';
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

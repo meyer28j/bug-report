@@ -14,6 +14,11 @@ const STATUS_LABELS = [
     'wont_fix' => "Won't Fix",
 ];
 
+function fieldError(array $errors, string $field): string
+{
+    return isset($errors[$field]) ? '<span class="field-error">' . htmlspecialchars($errors[$field], ENT_QUOTES) . '</span>' : '';
+}
+
 function renderStatusBadge(string $status): string
 {
     $label = STATUS_LABELS[$status] ?? $status;
