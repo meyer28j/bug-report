@@ -121,7 +121,13 @@ In display order:
 - Big, generous whitespace; large easy-to-read type; not cramped.
 - Status shown as a small colored badge/pill; screenshots large/clickable, not thumbnails; suggested fix in a monospace block; minimal color palette overall, color used only for status badges; clean sans-serif, dark text on light background.
 - Status badge colors — four distinct colors, one per status: Reported=yellow, Fixed=green, No Response=red, Won't Fix=purple.
-- Exact hex values, type scale, spacing: **TBD** — fill in here once chosen.
+- Sized for a desktop/high-res reader (recruiter/hiring manager on a work machine, often a large or ultrawide monitor) first — content is light, so it should read as effortless skimming rather than a dense document. Mobile stays fully usable but is the secondary target.
+- Typography: system font stack (`-apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`) — no webfont request. Base 18px / line-height 1.6. H1 2.75rem, H2 1.75rem, H3 1.25rem.
+- Layout: single centered content column, max-width 960px, 40px side padding (20px on mobile below 600px width). No grid system — the content doesn't need one.
+- Spacing: generous, roughly on an 8px unit; ~64px between major page sections, ~24px between paragraphs/fields.
+- Colors: background `#ffffff`, text `#1a1a1a`, secondary text/borders `#5f5f5f` / `#e0e0e0`. Links are dark text, underlined, no separate link color — color stays reserved for status badges.
+- Status badge hex (solid pill, white text): Reported `#E6A700`, Fixed `#2E7D32`, No Response `#C62828`, Won't Fix `#7B1FA2`.
+- Suggested-fix block: light gray background (`#f5f5f5`), 1px border, monospace font stack, generous padding.
 
 ## Out of Scope (for now)
 - No analytics dashboard, charts, or leaderboards — just the chronological feed and case pages.

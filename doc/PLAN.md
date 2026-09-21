@@ -51,10 +51,10 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [x] Redirect to the case page on success; show validation errors on failure
 
 ## Phase 7 — Visual Design
-- [ ] Fill in SPEC.md's Visual Design section — exact hex values, type scale, spacing
-- [ ] Build `src/style.css` per SPEC.md Visual Design section
-- [ ] Use "The Bug Report" as public-facing site title (header, `<title>`)
-- [ ] Apply across `index.php`, `case.php`, `admin/new.php`, `admin/index.php`, `admin/edit.php`
+- [x] Fill in SPEC.md's Visual Design section — exact hex values, type scale, spacing
+- [x] Build `src/style.css` per SPEC.md Visual Design section
+- [x] Use "The Bug Report" as public-facing site title (header, `<title>`)
+- [x] Apply across `index.php`, `case.php`, `admin/new.php`, `admin/index.php`, `admin/edit.php`
 
 ## Phase 8 — Security Hardening
 - [ ] Confirm `data/` sits outside `src/` (document root) — no `.htaccess` needed for `cases.db`, it's structurally unreachable
