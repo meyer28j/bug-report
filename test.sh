@@ -1,5 +1,7 @@
 #!/bin/bash
-# Automated smoke test for bug-report, covering Phases 1-6 of doc/PLAN.md.
+# Automated smoke test for bug-report, covering Phases 1-6 and the
+# app-level parts of Phase 8 of doc/PLAN.md (the two .htaccess files need a
+# real Apache server — see doc/TEST.md).
 # Runs against a scratch copy of the DB/screenshots on a separate port so it
 # never touches real dev data. Manual/visual checks that can't be automated
 # (layout, colors, responsiveness, etc.) live in doc/TEST.md.
@@ -61,8 +63,14 @@ mkdir -p "$SCREENSHOTS_DIR"
 # Minimal valid 1x1 PNG, well below any size cap.
 echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=" \
     | base64 -d > "$TMP_UPLOADS/valid.png"
+# Minimal valid 1x1 JPEG, for jpg/jpeg-specific extension handling.
+echo "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" \
+    | base64 -d > "$TMP_UPLOADS/valid.jpg"
 # Not an image at all, wrong extension too.
 printf 'not an image' > "$TMP_UPLOADS/bad.pdf"
+# Non-image bytes disguised with a valid image extension + Content-Type header
+# — the actual attack server-side MIME sniffing (mime_content_type()) defends against.
+printf 'not an image' > "$TMP_UPLOADS/fake.png"
 # Over the app's 5MB cap.
 head -c 6291456 /dev/urandom > "$TMP_UPLOADS/big.png"
 
@@ -135,6 +143,14 @@ assert_eq "$(status_of "$resp")" "200" "GET /index.php returns 200 with no cases
 assert_contains "$resp" "No cases yet." "empty feed shows empty-state message"
 
 # ---------------------------------------------------------------------------
+# Phase 6 — Admin listing (empty state, before any cases exist)
+# ---------------------------------------------------------------------------
+section "Phase 6 — Admin Listing (empty)"
+resp=$(req GET /admin/index.php)
+assert_eq "$(status_of "$resp")" "200" "GET /admin/index.php returns 200 with no cases"
+assert_contains "$resp" "No cases yet." "empty admin listing shows empty-state message"
+
+# ---------------------------------------------------------------------------
 # Phase 4 — Case page 404
 # ---------------------------------------------------------------------------
 section "Phase 4 — Case Page (404)"
@@ -190,6 +206,7 @@ resp=$(req POST /admin/new.php \
     --form-string "issue_title=T" --form-string "date_reported=2026-06-02" \
     -F "screenshot_bug=@$TMP_UPLOADS/valid.png;type=image/png")
 assert_contains "$resp" "Enter a valid http(s) URL." "invalid page_url shows inline error"
+assert_contains "$resp" 'value="A"' "valid fields are preserved in the re-rendered form on validation failure"
 
 # Over-length fields
 long201=$(printf 'a%.0s' $(seq 1 201))
@@ -227,6 +244,19 @@ files_after=$(ls "$SCREENSHOTS_DIR" | wc -l)
 assert_eq "$count_after" "$count_before" "no row inserted for wrong file type"
 assert_eq "$files_after" "$files_before" "no file saved for wrong file type"
 
+# Spoofed MIME: valid-looking extension + Content-Type header, non-image bytes
+count_before=$(sql "SELECT COUNT(*) FROM cases;")
+files_before=$(ls "$SCREENSHOTS_DIR" | wc -l)
+resp=$(req POST /admin/new.php \
+    --form-string "company=A" --form-string "page_url=https://x.example.com" \
+    --form-string "issue_title=T" --form-string "date_reported=2026-06-03" \
+    -F "screenshot_bug=@$TMP_UPLOADS/fake.png;type=image/png")
+assert_contains "$resp" "File must be a JPG, PNG, or WEBP image." "spoofed MIME (image extension/header, non-image bytes) is rejected"
+count_after=$(sql "SELECT COUNT(*) FROM cases;")
+files_after=$(ls "$SCREENSHOTS_DIR" | wc -l)
+assert_eq "$count_after" "$count_before" "no row inserted for spoofed MIME upload"
+assert_eq "$files_after" "$files_before" "no file saved for spoofed MIME upload"
+
 # Oversized file
 resp=$(req POST /admin/new.php \
     --form-string "company=A" --form-string "page_url=https://x.example.com" \
@@ -241,6 +271,17 @@ resp=$(req POST /admin/new.php \
     -F "screenshot_bug=@$TMP_UPLOADS/valid.png;type=image/png")
 loc=$(location_of "$resp")
 assert_contains "$loc" "slug=2026-06-01-zed-co-2" "colliding slug gets numeric suffix"
+
+# JPG upload (jpg-specific extension logic: both .jpg and .jpeg are valid)
+resp=$(req POST /admin/new.php \
+    --form-string "company=Jpg Co" --form-string "page_url=https://jpg.example.com" \
+    --form-string "issue_title=Jpg case" --form-string "date_reported=2026-06-07" \
+    -F "screenshot_bug=@$TMP_UPLOADS/valid.jpg;type=image/jpeg")
+if [ -f "$SCREENSHOTS_DIR/2026-06-07-jpg-co-bug.jpg" ]; then
+    pass "valid jpg upload saved with .jpg extension"
+else
+    fail "valid jpg upload saved with .jpg extension"
+fi
 
 # Optional fields left blank -> stored as NULL
 resp=$(req POST /admin/new.php \
@@ -399,6 +440,14 @@ tampered_company=$(sql "SELECT company FROM cases WHERE slug='2026-06-01-zed-co'
 assert_eq "$tampered_company" "Zed Co" "company can't be changed via edit.php POST params"
 tampered_url=$(sql "SELECT page_url FROM cases WHERE slug='2026-06-01-zed-co';")
 assert_eq "$tampered_url" "https://zed.example.com/pricing" "page_url can't be changed via edit.php POST params"
+
+# wont_fix status (fourth status; apostrophe in "Won't Fix" label — escaping check)
+resp=$(req POST "/admin/edit.php?slug=2026-06-01-zed-co" \
+    --form-string "status=wont_fix" --form-string "date_fixed=2026-06-10")
+assert_eq "$(status_of "$resp")" "302" "wont_fix status update redirects (302)"
+resp=$(req GET "/case.php?slug=2026-06-01-zed-co")
+assert_contains "$resp" "badge-wont_fix" "case page shows Won't Fix badge CSS class"
+assert_contains "$resp" "Won&#039;t Fix" "Won't Fix label's apostrophe is escaped correctly"
 
 # ---------------------------------------------------------------------------
 # Summary
