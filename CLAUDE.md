@@ -10,7 +10,7 @@ Personal bug-log site (public portfolio + LinkedIn-linked case log). Guiding pri
 Read these before any implementation work; do not duplicate their content here.
 
 ## Status
-Phases 0-7 done: DB, includes, public feed, case page, entry form, admin listing/edit, and visual design are all built and covered by `./test.sh`. Security hardening (Phase 8) is next. Update this section as phases in PLAN.md complete.
+Phases 0-8 done: DB, includes, public feed, case page, entry form, admin listing/edit, visual design, and security hardening are all built and covered by `./test.sh`. Deploy (Phase 9) is next. Update this section as phases in PLAN.md complete.
 
 ## Maintenance
 This file must stay small. New design decisions go into `doc/SPEC.md` as a new/updated section, not a new file. If a new doc is genuinely needed under `doc/`, add a one-line pointer under **Read first** instead of inlining its content.

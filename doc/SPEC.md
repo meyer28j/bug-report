@@ -74,8 +74,9 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 
 ## Security / File Exposure
 - `cases.db` lives in `data/`, a sibling of `src/` (the document root) — physically outside webroot, so it's never HTTP-reachable regardless of `.htaccess`. This is the actual guarantee; no rule to get wrong.
-- `src/screenshots/` and `src/includes/` are both inside webroot. Screenshots must stay servable (they're shown via `<img>` on public case pages) — only disable directory listing there. `src/includes/` holds only PHP, which the server executes rather than serves as static text, but add a `.htaccess` deny-all anyway as defense in depth.
-- Repo tracks structure, not data: `src/schema.sql` is committed; `data/` (the db) and the contents of `src/screenshots/` are gitignored. A fresh checkout gets nothing under either — both are built/populated locally or on the server.
+- `src/screenshots/` and `src/includes/` are both inside webroot. Screenshots must stay servable (they're shown via `<img>` on public case pages) — `.htaccess` there disables directory listing and denies `.php` execution (defense in depth alongside the upload extension/MIME check). `src/includes/` holds only PHP, which the server executes rather than serves as static text, but gets a `.htaccess` deny-all anyway as defense in depth. Both directives depend on the vhost allowing `.htaccess` overrides (`AllowOverride`) for `src/` — see Phase 9 in PLAN.md.
+- Screenshot uploads are verified server-side via `mime_content_type()` on the uploaded tmp file, not the client-reported `$_FILES[...]['type']`, which is trivially spoofable.
+- Repo tracks structure, not data: `src/schema.sql` is committed; `data/` (the db) and the contents of `src/screenshots/` are gitignored (except `src/screenshots/.htaccess`, which is structure). A fresh checkout gets nothing under either — both are built/populated locally or on the server.
 
 ## Feed (`index.php`)
 - Chronological list of all cases, sorted newest `date_reported` first. No pagination needed initially.

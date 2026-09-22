@@ -14,7 +14,7 @@ Log of bugs I've found on live sites, with status and fixes I've suggested. PHP 
   - `schema.sql` - DB schema (run once to create `../data/cases.db`)
   - `index.php` - public feed of cases
   - `case.php` - individual case detail page
-  - `admin/new.php` - entry form (local-network only, no auth)
+  - `admin/` - entry form, edit form, case listing (Tailscale-only, no auth)
   - `includes/` - DB connection, helpers
   - `screenshots/` - case screenshots (gitignored contents, publicly served)
 

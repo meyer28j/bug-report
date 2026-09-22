@@ -3,7 +3,7 @@
 Live progress doc. Check items off as completed. Details live in [SPEC.md](SPEC.md), the master design doc — don't duplicate them here.
 
 ## Phase 0 — Scaffolding & Environment
-- [x] `.gitignore`: `/data/`, `src/screenshots/`
+- [x] `.gitignore`: `/data/`, `src/screenshots/*` (with a `!src/screenshots/.htaccess` exception)
 - [x] `LICENSE` (MIT), `README.md`
 - [x] Create remaining directory structure per SPEC.md File Structure (`src/index.php`, `src/case.php`, `src/includes/`, `src/style.css`, `src/admin/`, `src/screenshots/`)
 - [x] Confirm local PHP + `sqlite3` CLI available
@@ -62,8 +62,8 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [x] `.htaccess` deny-all for `src/includes/` (defense in depth)
 - [x] Escape all output (`htmlspecialchars`) — issue_description, suggested_fix, etc.
 - [x] Server-side validation on all form inputs despite the network-level access restriction
-- [x] Screenshot uploads: verify actual file content via `finfo_file()`/`mime_content_type()` on the tmp file server-side, not the client-reported `$_FILES[...]['type']`
-- [x] `.htaccess` in `src/screenshots/` also disables PHP execution (defense in depth alongside the extension/MIME check)
+- [x] Server-side MIME sniffing on uploads (not the client-reported type)
+- [x] `.htaccess` in `src/screenshots/` also disables PHP execution
 
 ## Phase 9 — Deploy
 - [ ] Set up Tailscale on the LAMP server and on phone (and any other admin device)
@@ -71,6 +71,8 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [ ] Point vhost document root at `src/`
 - [ ] `mkdir -p data && mkdir -p src/screenshots`, build `cases.db` on server from `src/schema.sql`
 - [ ] Confirm `data/` and `src/screenshots/` writable by PHP-FPM
+- [ ] Confirm vhost allows `.htaccess` overrides for `src/` (`AllowOverride`); Apache's default disables them, which would silently no-op Phase 8's directory-listing/PHP-execution blocks
+- [ ] Confirm production `php.ini` has `display_errors=Off` / `log_errors=On`, so an uncaught DB error can't leak a stack trace to a visitor
 - [ ] First deploy, smoke test in production
 
 ## Phase 10 — Launch
