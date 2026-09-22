@@ -3,19 +3,10 @@ require __DIR__ . '/../includes/db.php';
 require __DIR__ . '/../includes/helpers.php';
 
 $cases = $pdo->query('SELECT slug, company, status FROM cases ORDER BY date_reported DESC')->fetchAll();
+
+renderPageHead('Admin — The Bug Report', '../style.css');
+renderSiteHeader('../index.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin — The Bug Report</title>
-<link rel="stylesheet" href="../style.css">
-</head>
-<body>
-<header>
-<a href="../index.php">The Bug Report</a>
-</header>
 <main class="admin-list">
 
 <h1>Admin</h1>

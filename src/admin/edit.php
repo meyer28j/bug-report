@@ -9,25 +9,7 @@ $stmt->execute([$slug]);
 $case = $stmt->fetch();
 
 if (!$case) {
-    http_response_code(404);
-    ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Case Not Found — The Bug Report</title>
-<link rel="stylesheet" href="../style.css">
-</head>
-<body>
-<main class="not-found">
-<p>Case not found.</p>
-<a href="index.php" class="button">Back to admin</a>
-</main>
-</body>
-</html>
-    <?php
-    exit;
+    render404('../style.css', 'index.php', 'Back to admin');
 }
 
 $errors = [];
@@ -55,27 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $fixProofFilename = $case['screenshot_fix_proof'];
-    $fixProofFile = $_FILES['screenshot_fix_proof'] ?? null;
-    if ($fixProofFile !== null && ($fixProofFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
-        [$newFilename, $uploadError] = validateAndStoreUpload($fixProofFile, $slug, 'fix-proof', __DIR__ . '/../screenshots');
-        if ($uploadError !== null) {
-            $errors['screenshot_fix_proof'] = $uploadError;
-        } else {
-            $fixProofFilename = $newFilename;
-        }
-    }
-
-    $afterFilename = $case['screenshot_after'];
-    $afterFile = $_FILES['screenshot_after'] ?? null;
-    if ($afterFile !== null && ($afterFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
-        [$newFilename, $uploadError] = validateAndStoreUpload($afterFile, $slug, 'after', __DIR__ . '/../screenshots');
-        if ($uploadError !== null) {
-            $errors['screenshot_after'] = $uploadError;
-        } else {
-            $afterFilename = $newFilename;
-        }
-    }
+    $fixProofFilename = handleOptionalUpload('screenshot_fix_proof', 'fix-proof', $case['screenshot_fix_proof'], $slug, $errors);
+    $afterFilename = handleOptionalUpload('screenshot_after', 'after', $case['screenshot_after'], $slug, $errors);
 
     if (empty($errors)) {
         $stmt = $pdo->prepare('UPDATE cases SET status = ?, date_fixed = ?, issue_description = ?, suggested_fix = ?, screenshot_fix_proof = ?, screenshot_after = ?, updated_at = CURRENT_TIMESTAMP WHERE slug = ?');
@@ -92,19 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+renderPageHead('Edit Case — The Bug Report', '../style.css');
+renderSiteHeader('../index.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Edit Case — The Bug Report</title>
-<link rel="stylesheet" href="../style.css">
-</head>
-<body>
-<header>
-<a href="../index.php">The Bug Report</a>
-</header>
 <main class="admin-form">
 
 <h1>Edit Case</h1>

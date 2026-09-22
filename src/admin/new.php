@@ -86,19 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+renderPageHead('New Case — The Bug Report', '../style.css');
+renderSiteHeader('../index.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>New Case — The Bug Report</title>
-<link rel="stylesheet" href="../style.css">
-</head>
-<body>
-<header>
-<a href="../index.php">The Bug Report</a>
-</header>
 <main class="admin-form">
 
 <h1>New Case</h1>

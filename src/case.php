@@ -9,39 +9,12 @@ $stmt->execute([$slug]);
 $case = $stmt->fetch();
 
 if (!$case) {
-    http_response_code(404);
-    ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Case Not Found — The Bug Report</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<main class="not-found">
-<p>Case not found.</p>
-<a href="index.php" class="button">Back to home</a>
-</main>
-</body>
-</html>
-    <?php
-    exit;
+    render404('style.css', 'index.php', 'Back to home');
 }
+
+renderPageHead($case['company'] . ' — ' . $case['issue_title'] . ' — The Bug Report', 'style.css');
+renderSiteHeader('index.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= htmlspecialchars($case['company'], ENT_QUOTES) ?> — <?= htmlspecialchars($case['issue_title'], ENT_QUOTES) ?> — The Bug Report</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-<a href="index.php">The Bug Report</a>
-</header>
 <main class="case">
 
 <h1><?= htmlspecialchars($case['company'], ENT_QUOTES) ?> — <?= htmlspecialchars($case['issue_title'], ENT_QUOTES) ?></h1>

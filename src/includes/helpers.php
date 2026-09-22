@@ -78,6 +78,78 @@ function validateAndStoreUpload(?array $file, string $slug, string $suffix, stri
     return [$filename, null];
 }
 
+function renderPageHead(string $title, string $cssHref): void
+{
+    ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><?= htmlspecialchars($title, ENT_QUOTES) ?></title>
+<link rel="stylesheet" href="<?= htmlspecialchars($cssHref, ENT_QUOTES) ?>">
+</head>
+<body>
+<?php
+}
+
+/**
+ * @param ?string $homeHref Link target, or null to render the plain home-page heading (no link).
+ */
+function renderSiteHeader(?string $homeHref): void
+{
+    if ($homeHref === null) {
+        echo "<header>\n<h1>The Bug Report</h1>\n</header>\n";
+    } else {
+        echo '<header>' . "\n" . '<a href="' . htmlspecialchars($homeHref, ENT_QUOTES) . '">The Bug Report</a>' . "\n</header>\n";
+    }
+}
+
+function render404(string $cssHref, string $backHref, string $backLabel): void
+{
+    http_response_code(404);
+    ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Not Found — The Bug Report</title>
+<link rel="stylesheet" href="<?= htmlspecialchars($cssHref, ENT_QUOTES) ?>">
+</head>
+<body>
+<main class="not-found">
+<p>Case not found.</p>
+<a href="<?= htmlspecialchars($backHref, ENT_QUOTES) ?>" class="button"><?= htmlspecialchars($backLabel, ENT_QUOTES) ?></a>
+</main>
+</body>
+</html>
+    <?php
+    exit;
+}
+
+/**
+ * Validates and stores an optional replacement screenshot upload for edit.php,
+ * keeping the existing filename when no new file was submitted.
+ *
+ * @return array{0: ?string, 1: ?string} [$filename, $error]. $filename is the existing or new filename.
+ */
+function handleOptionalUpload(string $field, string $suffix, ?string $currentFilename, string $slug, array &$errors): ?string
+{
+    $file = $_FILES[$field] ?? null;
+    if ($file === null || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return $currentFilename;
+    }
+
+    [$newFilename, $uploadError] = validateAndStoreUpload($file, $slug, $suffix, __DIR__ . '/../screenshots');
+    if ($uploadError !== null) {
+        $errors[$field] = $uploadError;
+        return $currentFilename;
+    }
+
+    return $newFilename;
+}
+
 function generateSlug(PDO $pdo, string $dateReported, string $company): string
 {
     $companySlug = strtolower(trim($company));
