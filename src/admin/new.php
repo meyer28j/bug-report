@@ -46,8 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($values['date_reported'] === '') {
         $errors['date_reported'] = 'Date reported is required.';
-    } elseif (!DateTime::createFromFormat('Y-m-d', $values['date_reported'])) {
-        $errors['date_reported'] = 'Enter a valid date (YYYY-MM-DD).';
+    } else {
+        $dt = DateTime::createFromFormat('Y-m-d', $values['date_reported']);
+        if (!$dt || $dt->format('Y-m-d') !== $values['date_reported']) {
+            $errors['date_reported'] = 'Enter a valid date (YYYY-MM-DD).';
+        }
     }
 
     $screenshotFile = $_FILES['screenshot_bug'] ?? null;

@@ -48,8 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['status'] = 'Select a valid status.';
     }
 
-    if ($values['date_fixed'] !== '' && !DateTime::createFromFormat('Y-m-d', $values['date_fixed'])) {
-        $errors['date_fixed'] = 'Enter a valid date (YYYY-MM-DD).';
+    if ($values['date_fixed'] !== '') {
+        $dt = DateTime::createFromFormat('Y-m-d', $values['date_fixed']);
+        if (!$dt || $dt->format('Y-m-d') !== $values['date_fixed']) {
+            $errors['date_fixed'] = 'Enter a valid date (YYYY-MM-DD).';
+        }
     }
 
     $fixProofFilename = $case['screenshot_fix_proof'];
