@@ -57,11 +57,13 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [x] Apply across `index.php`, `case.php`, `admin/new.php`, `admin/index.php`, `admin/edit.php`
 
 ## Phase 8 — Security Hardening
-- [ ] Confirm `data/` sits outside `src/` (document root) — no `.htaccess` needed for `cases.db`, it's structurally unreachable
-- [ ] `.htaccess` disable directory listing for `src/screenshots/` (images themselves must stay servable)
-- [ ] `.htaccess` deny-all for `src/includes/` (defense in depth)
-- [ ] Escape all output (`htmlspecialchars`) — issue_description, suggested_fix, etc.
-- [ ] Server-side validation on all form inputs despite the network-level access restriction
+- [x] Confirm `data/` sits outside `src/` (document root) — no `.htaccess` needed for `cases.db`, it's structurally unreachable
+- [x] `.htaccess` disable directory listing for `src/screenshots/` (images themselves must stay servable)
+- [x] `.htaccess` deny-all for `src/includes/` (defense in depth)
+- [x] Escape all output (`htmlspecialchars`) — issue_description, suggested_fix, etc.
+- [x] Server-side validation on all form inputs despite the network-level access restriction
+- [x] Screenshot uploads: verify actual file content via `finfo_file()`/`mime_content_type()` on the tmp file server-side, not the client-reported `$_FILES[...]['type']`
+- [x] `.htaccess` in `src/screenshots/` also disables PHP execution (defense in depth alongside the extension/MIME check)
 
 ## Phase 9 — Deploy
 - [ ] Set up Tailscale on the LAMP server and on phone (and any other admin device)

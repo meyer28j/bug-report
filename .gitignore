@@ -1,2 +1,3 @@
 /data/
-src/screenshots/
+src/screenshots/*
+!src/screenshots/.htaccess

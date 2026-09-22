@@ -54,6 +54,9 @@ Manual QA checklist, live doc — grows as new phases land (mirrors [PLAN.md](PL
 - [ ] Leaving a screenshot file input blank on submit keeps the existing screenshot (doesn't clear it)
 - [ ] Re-editing a case a second time still redirects correctly and doesn't duplicate the row (same `id`/`slug`)
 
+## Security Hardening (Phase 8)
+- [ ] `src/includes/.htaccess` and `src/screenshots/.htaccess` — PHP's built-in server ignores `.htaccess`, so these can only be verified on the real Apache server (Phase 9): directory listing off in `screenshots/`, `.php` files unreachable in both directories, images still serve normally
+
 ## Manual/Visual — General
 These need eyes on a real browser; `./test.sh` can't judge them.
 - [ ] Every page (feed, case, 404, admin index, new, edit) loads with no PHP warnings/notices visible in the HTML source or in `./run.sh`'s terminal output
