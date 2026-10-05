@@ -23,7 +23,8 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 
 ## Access Model
 - Public pages: feed + individual case pages, open to the world.
-- Admin pages (`admin/index.php`, `admin/new.php`, `admin/edit.php`): no login/auth — the server is reachable only over a private Tailscale network, so network membership is the security boundary, not app-level auth. No app-level auth on top of this.
+- Admin pages (`admin/index.php`, `admin/new.php`, `admin/edit.php`): publicly reachable, protected by Apache HTTP Basic Auth (`<Location /admin>`, bcrypt `htpasswd` file outside the repo) over HTTPS only. No app-level login code — the web server is the auth boundary. Chosen over a Tailscale-only admin for zero-setup access from any device.
+- CSRF: browsers re-send cached Basic Auth credentials on cross-site form posts, so admin POST handlers reject any request whose `Origin` header doesn't match the host (`rejectCrossOriginPost()` in `helpers.php`). A missing `Origin` is allowed (non-browser clients still need the credentials).
 
 ## Dev & Deploy
 - Build/test locally with PHP's built-in server + the `sqlite3` CLI.

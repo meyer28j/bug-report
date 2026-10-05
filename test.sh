@@ -451,6 +451,36 @@ assert_contains "$resp" "badge-wont_fix" "case page shows Won't Fix badge CSS cl
 assert_contains "$resp" "Won&#039;t Fix" "Won't Fix label's apostrophe is escaped correctly"
 
 # ---------------------------------------------------------------------------
+# Cross-origin POST guard (CSRF — admin is behind Basic Auth, which browsers re-send cross-site)
+# ---------------------------------------------------------------------------
+section "Cross-Origin POST Guard"
+
+count_before=$(sql "SELECT COUNT(*) FROM cases;")
+resp=$(req POST /admin/new.php -H "Origin: https://evil.example.com" \
+    --form-string "company=Evil Co" \
+    --form-string "page_url=https://evil.example.com" \
+    --form-string "issue_title=Forged case" \
+    --form-string "date_reported=2026-06-02" \
+    -F "screenshot_bug=@$TMP_UPLOADS/valid.png;type=image/png")
+assert_eq "$(status_of "$resp")" "403" "new.php rejects foreign Origin (403)"
+assert_eq "$(sql "SELECT COUNT(*) FROM cases;")" "$count_before" "foreign-Origin new.php POST inserts no row"
+if ls "$SCREENSHOTS_DIR"/2026-06-02-evil-co-* >/dev/null 2>&1; then
+    fail "foreign-Origin new.php POST saves no screenshot"
+else
+    pass "foreign-Origin new.php POST saves no screenshot"
+fi
+
+status_before=$(sql "SELECT status FROM cases WHERE slug='2026-06-01-zed-co';")
+resp=$(req POST "/admin/edit.php?slug=2026-06-01-zed-co" -H "Origin: https://evil.example.com" \
+    --form-string "status=fixed")
+assert_eq "$(status_of "$resp")" "403" "edit.php rejects foreign Origin (403)"
+assert_eq "$(sql "SELECT status FROM cases WHERE slug='2026-06-01-zed-co';")" "$status_before" "foreign-Origin edit.php POST changes nothing"
+
+resp=$(req POST "/admin/edit.php?slug=2026-06-01-zed-co" -H "Origin: $BASE" \
+    --form-string "status=$status_before")
+assert_eq "$(status_of "$resp")" "302" "edit.php accepts same-host Origin (302)"
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 echo

@@ -66,11 +66,16 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [x] `.htaccess` in `src/screenshots/` also disables PHP execution
 
 ## Phase 9 — Deploy
-- [ ] Set up Tailscale on the LAMP server and on phone (and any other admin device)
+- [x] Admin access model: Basic Auth + HTTPS replaces Tailscale; `Origin` check on admin POSTs (see SPEC.md Access Model)
+- [ ] Confirm `pdo_sqlite` PHP extension installed on server
 - [ ] Init git remote on LAMP server, initial clone
 - [ ] Point vhost document root at `src/`
+- [ ] HTTPS cert (Let's Encrypt) for the vhost
+- [ ] Basic Auth on `<Location /admin>` — `htpasswd -B` file outside the repo; confirm `/admin/` prompts and public pages don't
 - [ ] `mkdir -p data && mkdir -p src/screenshots`, build `cases.db` on server from `src/schema.sql`
-- [ ] Confirm `data/` and `src/screenshots/` writable by PHP-FPM
+- [ ] Confirm `data/` (the directory, for SQLite journal files) and `src/screenshots/` writable by PHP-FPM
+- [ ] PHP `upload_max_filesize` ≥ 5M and `post_max_size` ≥ 11M (two screenshots per edit form); defaults are 2M/8M
+- [ ] Confirm a `.php` file in `src/screenshots/` is denied — if PHP-FPM is wired via `ProxyPassMatch`, it bypasses `.htaccess` and needs `SetHandler` in a `<FilesMatch>` instead
 - [ ] Confirm vhost allows `.htaccess` overrides for `src/` (`AllowOverride`); Apache's default disables them, which would silently no-op Phase 8's directory-listing/PHP-execution blocks
 - [ ] Confirm production `php.ini` has `display_errors=Off` / `log_errors=On`, so an uncaught DB error can't leak a stack trace to a visitor
 - [ ] First deploy, smoke test in production

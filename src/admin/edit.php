@@ -21,6 +21,7 @@ $values = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    rejectCrossOriginPost();
     $values['status'] = trim($_POST['status'] ?? '');
     $values['date_fixed'] = trim($_POST['date_fixed'] ?? '');
     $values['issue_description'] = trim($_POST['issue_description'] ?? '');

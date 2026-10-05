@@ -57,6 +57,11 @@ Manual QA checklist, live doc — grows as new phases land (mirrors [PLAN.md](PL
 ## Security Hardening (Phase 8)
 - [ ] `src/includes/.htaccess` and `src/screenshots/.htaccess` — PHP's built-in server ignores `.htaccess`, so these can only be verified on the real Apache server (Phase 9): directory listing off in `screenshots/`, `.php` files unreachable in both directories, images still serve normally
 
+## Deploy (Phase 9)
+- [ ] `/admin/` (and each admin page) prompts for Basic Auth over HTTPS; wrong password → 401; public feed/case pages don't prompt
+- [ ] HTTP requests redirect to HTTPS (Basic Auth credentials never sent in cleartext)
+- [ ] Create + edit a case from the real browser after logging in — confirms the `Origin` check accepts same-site posts behind the real domain/HTTPS
+
 ## Manual/Visual — General
 These need eyes on a real browser; `./test.sh` can't judge them.
 - [ ] Every page (feed, case, 404, admin index, new, edit) loads with no PHP warnings/notices visible in the HTML source or in `./run.sh`'s terminal output

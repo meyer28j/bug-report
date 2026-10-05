@@ -129,6 +129,20 @@ function render404(string $cssHref, string $backHref, string $backLabel): void
 }
 
 /**
+ * CSRF guard for admin POSTs. Browsers re-send cached Basic Auth credentials on
+ * cross-site form posts, so reject any POST whose Origin isn't this host.
+ * A missing Origin (non-browser clients like curl) is allowed — they'd need the credentials anyway.
+ */
+function rejectCrossOriginPost(): void
+{
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? null;
+    if ($origin !== null && preg_replace('~^https?://~i', '', $origin) !== ($_SERVER['HTTP_HOST'] ?? '')) {
+        http_response_code(403);
+        exit('Forbidden');
+    }
+}
+
+/**
  * Validates and stores an optional replacement screenshot upload for edit.php,
  * keeping the existing filename when no new file was submitted.
  *

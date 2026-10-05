@@ -14,6 +14,7 @@ $values = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    rejectCrossOriginPost();
     $values['company'] = trim($_POST['company'] ?? '');
     $values['page_url'] = trim($_POST['page_url'] ?? '');
     $values['issue_title'] = trim($_POST['issue_title'] ?? '');
