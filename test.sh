@@ -122,8 +122,9 @@ req() {
 status_of() { echo "$1" | head -1 | awk '{print $2}'; }
 location_of() { echo "$1" | grep -i '^Location:' | head -1 | sed -E 's/^[Ll]ocation: *//' | tr -d '\r\n'; }
 
-sql() { sqlite3 "$DATA_DB" "$1"; }
-sql_null() { sqlite3 -cmd '.nullvalue __NULL__' "$DATA_DB" "$1"; }
+# -init /dev/null: ignore ~/.sqliterc (e.g. `.headers on` would break numeric output).
+sql() { sqlite3 -init /dev/null "$DATA_DB" "$1"; }
+sql_null() { sqlite3 -init /dev/null -cmd '.nullvalue __NULL__' "$DATA_DB" "$1"; }
 
 # ---------------------------------------------------------------------------
 # Phase 0 — Scaffolding

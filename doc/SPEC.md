@@ -30,6 +30,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 - Web server document root is `src/` (not repo root) — both locally and on the LAMP server.
 - Deploy via git: remote configured on the LAMP server, deploy by SSH-ing in and running `git pull`.
 - Deploy must `mkdir -p data && mkdir -p src/screenshots` on first setup — both are gitignored so a fresh clone won't have them.
+- Timezone is set in-app (`America/Vancouver`, top of `includes/db.php`), not via `php.ini`, so dates are local regardless of server config.
 
 ## File Structure
 ```
