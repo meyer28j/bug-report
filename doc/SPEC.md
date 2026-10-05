@@ -23,7 +23,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 
 ## Access Model
 - Public pages: feed + individual case pages, open to the world.
-- Admin pages (`admin/index.php`, `admin/new.php`, `admin/edit.php`): publicly reachable, protected by Apache HTTP Basic Auth (`<Location /admin>`, bcrypt `htpasswd` file outside the repo) over HTTPS only. No app-level login code — the web server is the auth boundary. Chosen over a Tailscale-only admin for zero-setup access from any device.
+- Admin pages (`admin/index.php`, `admin/new.php`, `admin/edit.php`): publicly reachable, protected by Apache HTTP Basic Auth (`<Directory …/src/admin>` — filesystem-matched, so URL variants can't bypass it the way they can a `<Location>`; bcrypt `htpasswd` file outside the repo) over HTTPS only. No app-level login code — the web server is the auth boundary. Chosen over a Tailscale-only admin for zero-setup access from any device.
 - CSRF: browsers re-send cached Basic Auth credentials on cross-site form posts, so admin POST handlers reject any request whose `Origin` header doesn't match the host (`rejectCrossOriginPost()` in `helpers.php`). A missing `Origin` is allowed (non-browser clients still need the credentials).
 
 ## Dev & Deploy
@@ -31,6 +31,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 - Web server document root is `src/` (not repo root) — both locally and on the LAMP server.
 - Deploy via git: remote configured on the LAMP server, deploy by SSH-ing in and running `git pull`.
 - Deploy must `mkdir -p data && mkdir -p src/screenshots` on first setup — both are gitignored so a fresh clone won't have them.
+- PHP runtime settings live in `src/.user.ini` (read per-directory by PHP-FPM), not `php.ini`: `upload_max_filesize=6M` (above the app's 5MB cap so the app's own error shows), `post_max_size=13M` (two screenshots per edit), `display_errors=Off`, `log_errors=On`. `php -S` ignores `.user.ini`, so `run.sh` passes the upload limits via `-d`. The vhost must deny HTTP access to `.user.ini`.
 - Timezone is set in-app (`America/Vancouver`, top of `includes/db.php`), not via `php.ini`, so dates are local regardless of server config.
 
 ## File Structure
@@ -40,6 +41,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 ├── data/                   # gitignored, outside webroot — private, never HTTP-reachable
 │   └── cases.db
 └── src/                    # web server document root
+    ├── .user.ini           # PHP-FPM settings: upload limits, display_errors off
     ├── schema.sql          # DB schema (source of truth, run once to create ../data/cases.db)
     ├── index.php           # public feed
     ├── case.php            # public case page (?slug=xxx)

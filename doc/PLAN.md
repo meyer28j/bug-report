@@ -71,13 +71,13 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [ ] Init git remote on LAMP server, initial clone
 - [ ] Point vhost document root at `src/`
 - [ ] HTTPS cert (Let's Encrypt) for the vhost
-- [ ] Basic Auth on `<Location /admin>` — `htpasswd -B` file outside the repo; confirm `/admin/` prompts and public pages don't
+- [ ] Basic Auth on `<Directory …/src/admin>` — `htpasswd -B` file outside the repo; confirm `/admin/` prompts and public pages don't
 - [ ] `mkdir -p data && mkdir -p src/screenshots`, build `cases.db` on server from `src/schema.sql`
 - [ ] Confirm `data/` (the directory, for SQLite journal files) and `src/screenshots/` writable by PHP-FPM
-- [ ] PHP `upload_max_filesize` ≥ 5M and `post_max_size` ≥ 11M (two screenshots per edit form); defaults are 2M/8M
+- [x] Upload limits + `display_errors=Off` / `log_errors=On` in `src/.user.ini` (see SPEC.md Dev & Deploy); `run.sh` mirrors the limits locally
+- [ ] Confirm `src/.user.ini` takes effect under PHP-FPM (`phpinfo()` shows upload_max_filesize 6M, display_errors Off), and the vhost denies HTTP access to `.user.ini`
 - [ ] Confirm a `.php` file in `src/screenshots/` is denied — if PHP-FPM is wired via `ProxyPassMatch`, it bypasses `.htaccess` and needs `SetHandler` in a `<FilesMatch>` instead
 - [ ] Confirm vhost allows `.htaccess` overrides for `src/` (`AllowOverride`); Apache's default disables them, which would silently no-op Phase 8's directory-listing/PHP-execution blocks
-- [ ] Confirm production `php.ini` has `display_errors=Off` / `log_errors=On`, so an uncaught DB error can't leak a stack trace to a visitor
 - [ ] First deploy, smoke test in production
 
 ## Phase 10 — Launch
