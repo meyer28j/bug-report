@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 renderPageHead('New Case — The Bug Report', '../style.css');
-renderSiteHeader('../index.php');
+renderSiteHeader('../');
 ?>
 <main class="admin-form">
 

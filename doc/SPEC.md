@@ -19,7 +19,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
 ## Stack
 - Existing LAMP server, PHP-FPM.
 - SQLite (`cases.db`) — single-writer, low-volume, read-mostly data fits well; avoids DB server overhead.
-- No JS framework; plain PHP + minimal CSS.
+- No JS framework; plain PHP + minimal CSS. The only JS is `bugs.js`, the site-wide ant easter egg (see Visual Design).
 
 ## Access Model
 - Public pages: feed + individual case pages, open to the world.
@@ -49,6 +49,7 @@ Guiding principle: **keep it as simple as possible.** A lightweight log, not a p
     │   ├── db.php          # PDO connection
     │   └── helpers.php     # status badge render, timeline render
     ├── style.css
+    ├── bugs.js             # crawling-ants easter egg, loaded by the shared header
     ├── admin/
     │   ├── index.php       # list of cases with edit links
     │   ├── new.php         # entry form
@@ -133,6 +134,7 @@ In display order:
 - Colors: background `#ffffff`, text `#1a1a1a`, secondary text/borders `#5f5f5f` / `#e0e0e0`. Links are dark text, underlined, no separate link color — color stays reserved for status badges.
 - Status badge hex (solid pill, white text): Reported `#E6A700`, Fixed `#2E7D32`, No Response `#C62828`, Won't Fix `#7B1FA2`.
 - Suggested-fix block: light gray background (`#f5f5f5`), 1px border, monospace font stack, generous padding.
+- Header + easter egg (every page, including 404s; `renderSiteHeader()` + `bugs.js`): the title text "The Bug Report" links to the public home page (`index.php`) from everywhere; on the feed it's wrapped in the page's `<h1>`, elsewhere a `<div>`, both `.site-title`. An ant logo sits to the left of the title (3rem, vertically centered on the 2rem title; `ANT_SVG` in `helpers.php`, inline SVG in green `#4e9d55` (`--color-ant`), not an emoji, so it looks the same on every platform). Clicking it squashes it (stays flattened and faded for the rest of the page view), and three ants of the same drawing burst out from it. The ants crawl beneath all page content and above only the page background (`z-index: -1`), rotated to face their heading. They sit idle for long stretches (5–15s), then wander a short way (1–3s, slowly) before stopping again, to stay unobtrusive. The cursor alone doesn't disturb them; a click/tap within ~110px of an ant (but not on it) startles it into skittering away, and a click/tap on one squashes it (flattens, fades) and it respawns ~4s later. Since content covers them, clicks are matched to ants by distance in a document-level listener and still reach whatever was clicked. A deliberate exception to the no-jokes tone and color-only-for-badges rules. Under `prefers-reduced-motion` the logo is a static decoration (no pointer cursor, no ants). Ants are hidden when printing; logo and ants are `aria-hidden`.
 
 ## Out of Scope (for now)
 - No analytics dashboard, charts, or leaderboards — just the chronological feed and case pages.

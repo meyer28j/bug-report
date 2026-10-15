@@ -7,6 +7,19 @@ const ALLOWED_UPLOAD_MIME_TYPES = [
 ];
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
+// Top-down ant, head pointing up. Sized by CSS.
+const ANT_SVG = '<svg viewBox="0 0 24 24">'
+    . '<g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">'
+    . '<path d="M11 3.6Q9.8 1.8 8.2 1.2M13 3.6Q14.2 1.8 15.8 1.2"/>'
+    . '<path d="M11 9L8 7.5L6.5 5M11 10.2L7.5 10.5L5.5 12M11 11.2L8.5 13L7.5 16"/>'
+    . '<path d="M13 9L16 7.5L17.5 5M13 10.2L16.5 10.5L18.5 12M13 11.2L15.5 13L16.5 16"/>'
+    . '</g>'
+    . '<g fill="currentColor">'
+    . '<ellipse cx="12" cy="5" rx="2.2" ry="2"/>'
+    . '<ellipse cx="12" cy="10" rx="1.6" ry="2.4"/>'
+    . '<ellipse cx="12" cy="17" rx="3" ry="4.2"/>'
+    . '</g></svg>';
+
 const STATUS_LABELS = [
     'reported' => 'Reported',
     'fixed' => 'Fixed',
@@ -94,30 +107,28 @@ function renderPageHead(string $title, string $cssHref): void
 }
 
 /**
- * @param ?string $homeHref Link target, or null to render the plain home-page heading (no link).
+ * @param string $root Path from the current page to src/ ('' or '../').
+ * @param bool $isHome Wrap the title in the page's <h1> (feed only; other pages have their own).
  */
-function renderSiteHeader(?string $homeHref): void
+function renderSiteHeader(string $root, bool $isHome = false): void
 {
-    if ($homeHref === null) {
-        echo "<header>\n<h1>The Bug Report</h1>\n</header>\n";
-    } else {
-        echo '<header>' . "\n" . '<a href="' . htmlspecialchars($homeHref, ENT_QUOTES) . '">The Bug Report</a>' . "\n</header>\n";
-    }
+    // The ant logo is bugs.js's easter-egg trigger, and the source of its ant markup.
+    $title = '<span class="site-logo" aria-hidden="true">' . ANT_SVG . '</span> '
+        . '<a href="' . htmlspecialchars($root, ENT_QUOTES) . 'index.php">The Bug Report</a>';
+    $tag = $isHome ? 'h1' : 'div';
+    echo "<header>\n<$tag class=\"site-title\">$title</$tag>\n"
+        . '<script src="' . htmlspecialchars($root, ENT_QUOTES) . 'bugs.js" defer></script>' . "\n</header>\n";
 }
 
-function render404(string $cssHref, string $backHref, string $backLabel): void
+/**
+ * @param string $root Path from the current page to src/ ('' or '../').
+ */
+function render404(string $root, string $backHref, string $backLabel): void
 {
     http_response_code(404);
+    renderPageHead('Case Not Found — The Bug Report', $root . 'style.css');
+    renderSiteHeader($root);
     ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Case Not Found — The Bug Report</title>
-<link rel="stylesheet" href="<?= htmlspecialchars($cssHref, ENT_QUOTES) ?>">
-</head>
-<body>
 <main class="not-found">
 <p>Case not found.</p>
 <a href="<?= htmlspecialchars($backHref, ENT_QUOTES) ?>" class="button"><?= htmlspecialchars($backLabel, ENT_QUOTES) ?></a>

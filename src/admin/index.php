@@ -5,7 +5,7 @@ require __DIR__ . '/../includes/helpers.php';
 $cases = $pdo->query('SELECT slug, company, status FROM cases ORDER BY date_reported DESC')->fetchAll();
 
 renderPageHead('Admin — The Bug Report', '../style.css');
-renderSiteHeader('../index.php');
+renderSiteHeader('../');
 ?>
 <main class="admin-list">
 

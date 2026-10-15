@@ -9,11 +9,11 @@ $stmt->execute([$slug]);
 $case = $stmt->fetch();
 
 if (!$case) {
-    render404('style.css', 'index.php', 'Back to home');
+    render404('', 'index.php', 'Back to home');
 }
 
 renderPageHead($case['company'] . ' — ' . $case['issue_title'] . ' — The Bug Report', 'style.css');
-renderSiteHeader('index.php');
+renderSiteHeader('');
 ?>
 <main class="case">
 

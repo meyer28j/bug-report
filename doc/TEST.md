@@ -14,6 +14,13 @@ Manual QA checklist, live doc — grows as new phases land (mirrors [PLAN.md](PL
 - [ ] Each row shows date, company, issue title (linked), status badge
 - [ ] Status badge label matches case status (Reported / Fixed / No Response / Won't Fix)
 - [ ] Case title link goes to the correct `case.php?slug=`
+- [ ] Every page's header (feed, case, 404s, admin) shows a green ant to the left of "The Bug Report", vertically centered on the title at desktop and phone widths; no ants on the page until it's clicked; clicking the title text goes to the public home page
+- [ ] Clicking (or tapping) the logo flattens it, it stays flattened, three ants burst out from it, and clicking it again does nothing
+- [ ] Ants render beneath everything (text, badges, header) and above only the page background
+- [ ] Three ants mostly sit still, occasionally crawl a short way slowly, stay on-screen (including after a window resize), and are rotated to point their head along their direction of travel
+- [ ] Moving the cursor near an ant does nothing; clicking (or tapping) near one, but not on it, makes it skitter away
+- [ ] Clicking (or tapping on a phone) a bug squashes it, it fades out, and a new one appears ~4s later; clicking a link that's over an ant both follows the link and squashes the ant, and text selection still works near ants
+- [ ] With OS "reduce motion" on, the logo shows but clicking it does nothing and no bugs appear; print preview shows no bugs
 
 ## Case Page (`case.php`)
 - [ ] Unknown/missing slug → HTTP 404, "case not found" message, home button works

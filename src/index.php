@@ -5,7 +5,7 @@ require __DIR__ . '/includes/helpers.php';
 $cases = $pdo->query('SELECT slug, company, issue_title, status, date_reported FROM cases ORDER BY date_reported DESC')->fetchAll();
 
 renderPageHead('The Bug Report', 'style.css');
-renderSiteHeader(null);
+renderSiteHeader('', true);
 ?>
 <main>
 <?php if (empty($cases)): ?>

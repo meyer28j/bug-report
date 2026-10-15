@@ -130,7 +130,7 @@ sql_null() { sqlite3 -init /dev/null -cmd '.nullvalue __NULL__' "$DATA_DB" "$1";
 # Phase 0 — Scaffolding
 # ---------------------------------------------------------------------------
 section "Phase 0 — Scaffolding"
-for f in index.php case.php schema.sql includes/db.php includes/helpers.php \
+for f in index.php case.php bugs.js schema.sql includes/db.php includes/helpers.php \
          admin/new.php admin/edit.php admin/index.php; do
     if [ -f "$SRC/$f" ]; then pass "src/$f exists"; else fail "src/$f missing"; fi
 done
@@ -142,6 +142,9 @@ section "Phase 3 — Public Feed (empty)"
 resp=$(req GET /index.php)
 assert_eq "$(status_of "$resp")" "200" "GET /index.php returns 200 with no cases"
 assert_contains "$resp" "No cases yet." "empty feed shows empty-state message"
+assert_contains "$resp" 'src="bugs.js"' "feed loads the crawling-bugs easter egg"
+assert_contains "$resp" 'class="site-logo"' "feed header shows the ant logo (easter-egg trigger)"
+assert_contains "$resp" '<a href="index.php">The Bug Report</a>' "feed title links home"
 
 # ---------------------------------------------------------------------------
 # Phase 6 — Admin listing (empty state, before any cases exist)
@@ -150,6 +153,8 @@ section "Phase 6 — Admin Listing (empty)"
 resp=$(req GET /admin/index.php)
 assert_eq "$(status_of "$resp")" "200" "GET /admin/index.php returns 200 with no cases"
 assert_contains "$resp" "No cases yet." "empty admin listing shows empty-state message"
+assert_contains "$resp" 'src="../bugs.js"' "admin page loads the bugs easter egg from src/"
+assert_contains "$resp" '<a href="../index.php">The Bug Report</a>' "admin title links to the public home page"
 
 # ---------------------------------------------------------------------------
 # Phase 4 — Case page 404
@@ -158,6 +163,9 @@ section "Phase 4 — Case Page (404)"
 resp=$(req GET "/case.php?slug=does-not-exist")
 assert_eq "$(status_of "$resp")" "404" "unknown slug returns HTTP 404"
 assert_contains "$resp" "Case not found." "404 page shows case-not-found message"
+assert_contains "$resp" 'src="bugs.js"' "404 page loads the bugs easter egg"
+assert_contains "$resp" 'class="site-logo"' "404 page header shows the ant logo"
+assert_contains "$resp" '<a href="index.php">The Bug Report</a>' "404 page title links home"
 assert_contains "$resp" 'href="index.php"' "404 page links back home"
 
 # ---------------------------------------------------------------------------

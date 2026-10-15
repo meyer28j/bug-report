@@ -9,7 +9,7 @@ $stmt->execute([$slug]);
 $case = $stmt->fetch();
 
 if (!$case) {
-    render404('../style.css', 'index.php', 'Back to admin');
+    render404('../', 'index.php', 'Back to admin');
 }
 
 $errors = [];
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 renderPageHead('Edit Case — The Bug Report', '../style.css');
-renderSiteHeader('../index.php');
+renderSiteHeader('../');
 ?>
 <main class="admin-form">
 

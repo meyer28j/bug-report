@@ -55,6 +55,7 @@ This is a core, recurring workflow (checking in on cases and updating them), not
 - [x] Build `src/style.css` per SPEC.md Visual Design section
 - [x] Use "The Bug Report" as public-facing site title (header, `<title>`)
 - [x] Apply across `index.php`, `case.php`, `admin/new.php`, `admin/index.php`, `admin/edit.php`
+- [x] Site-wide ant logo + crawling-ants easter egg; header title links home from every page, `src/bugs.js` (see SPEC.md Visual Design)
 
 ## Phase 8 — Security Hardening
 - [x] Confirm `data/` sits outside `src/` (document root) — no `.htaccess` needed for `cases.db`, it's structurally unreachable

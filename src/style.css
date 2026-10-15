@@ -11,6 +11,7 @@
   --color-text-secondary: #5f5f5f;
   --color-border: #e0e0e0;
   --color-error: #c62828;
+  --color-ant: #4e9d55;
 
   --badge-reported: #e6a700;
   --badge-fixed: #2e7d32;
@@ -77,13 +78,16 @@ header {
   border-bottom: 1px solid var(--color-border);
 }
 
-header h1, header a {
-  display: inline-block;
+.site-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  text-decoration: none;
+  line-height: 1.2;
   letter-spacing: -0.01em;
+}
+
+.site-title a {
+  text-decoration: none;
 }
 
 main {
@@ -373,4 +377,61 @@ form button[type="submit"] {
     flex-direction: column;
     gap: 16px;
   }
+}
+
+/* Feed easter egg (bugs.js). z-index -1 paints the ants above the page
+   background but beneath all content. That relies on only body having a
+   background (it propagates to the canvas); a background on html would
+   hide them. */
+.crawl-bug {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 28px;
+  height: 28px;
+  color: var(--color-ant);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: crawl-bug-in 0.6s ease-out;
+}
+
+.crawl-bug svg,
+.site-logo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.site-logo {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  margin-right: 0.05em;
+  vertical-align: middle;
+  color: var(--color-ant);
+}
+
+.site-logo.active {
+  cursor: pointer;
+}
+
+.site-logo.squashed {
+  cursor: default;
+  transform: scale(1.5, 0.3);
+  opacity: 0.4;
+  transition: transform 0.08s ease-out, opacity 0.3s;
+}
+
+.crawl-bug.squashed {
+  opacity: 0;
+  transition: transform 0.08s ease-out, opacity 1.2s ease-in 1s;
+}
+
+@keyframes crawl-bug-in {
+  from { opacity: 0; }
+}
+
+@media print {
+  .crawl-bug { display: none; }
 }
