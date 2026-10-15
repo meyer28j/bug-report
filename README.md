@@ -11,7 +11,7 @@ Log of bugs I've found on live sites, with status and fixes I've suggested. PHP 
 
 - `data/` - `cases.db` (gitignored, outside the web server document root, private)
 - `src/` - web server document root
-  - `schema.sql` - DB schema (run once to create `../data/cases.db`)
+  - `schema.sql` - DB schema (`run.sh` applies it automatically if `../data/cases.db` is missing or empty; on the server, run it once by hand)
   - `index.php` - public feed of cases
   - `case.php` - individual case detail page
   - `admin/` - entry form, edit form, case listing (behind Apache Basic Auth over HTTPS)
